@@ -37,7 +37,7 @@ class WeatherForecaster:
 
         twidata.weather = self.__translate(int(data["weather"][0]["id"]))
 
-        twidata.temp = str( "{:.2f}".format( float(data["main"]["temp"]) - 273.15) ) + "度"
+        twidata.temp = str( "{:.2f}".format( float(data["main"]["temp"]) - 273.15) ) + "℃"
         twidata.cloud_val = str( data["clouds"]["all"] ) + "％"
 
         rain_val = 0
