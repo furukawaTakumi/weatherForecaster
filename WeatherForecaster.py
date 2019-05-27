@@ -33,7 +33,8 @@ class WeatherForecaster:
 
         date = data["dt_txt"]
         twidata.date = date.split(" ")[0]
-
+        
+        # datetimeクラスを利用して表示できるように変更する
         utc_time = data["dt_txt"].split(" ")[1]
         jp_hour = (int(utc_time.split(":")[0]) + 9) % 24
         hour_formatFunc = lambda x: "0" + str(x) if x < 10 else str(x)
@@ -66,7 +67,7 @@ class WeatherForecaster:
             return "雪"
         elif weatherID // 100 == 7:
             return "特殊気象(霧など)"
-        elif weatherID == 100:
+        elif weatherID == 800:
             return "晴天"
         elif weatherID // 100 == 8:
             return "曇り"
