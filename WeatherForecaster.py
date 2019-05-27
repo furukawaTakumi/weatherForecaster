@@ -4,19 +4,20 @@ import json
 import requests
 import Twidata
 import APIgetDataException as apide
+import datetime
 
 # 天気を予想するクラス
 class WeatherForecaster:
-    def __init__(self, lat='35',lon='137'):
+    def __init__(self, ZIP="470-0356,JP"):
         self.api_key = 'b78fc959028d96ca6dffa19705903ee6'
-        self.api_page = 'http://api.openweathermap.org/data/2.5/forecast?lat={0}&lon={1}&APPID={2}&cnt=1'
-        self.lat = lat
-        self.lon = lon
+        self.api_page = 'http://api.openweathermap.org/data/2.5/forecast?zip={0}&APPID={1}&cnt=1&lang={2}'
+        self.ZIP = ZIP
+        self.lang = "ja"
 
     # 三時間毎の天気を取得する
     def getJsonData(self):
         # {0},{1}の部分にそれぞれ場所とAPIキーを設定する
-        url = self.api_page.format(self.lat, self.lon, self.api_key)
+        url = self.api_page.format(self.ZIP, self.api_key, self.lang)
         req_response = requests.get( url )
         res = json.loads(req_response.text)
         if "message" in res and 'Internal error: 500001' == res["message"]:
@@ -32,17 +33,9 @@ class WeatherForecaster:
             raise apide.APIgetDataException("APIサービスが混んでいるようです")
 
         date = data["dt_txt"]
-        twidata.date = date.split(" ")[0]
-        
-        # datetimeクラスを利用して表示できるように変更する
-        utc_time = data["dt_txt"].split(" ")[1]
-        jp_hour = (int(utc_time.split(":")[0]) + 9) % 24
-        hour_formatFunc = lambda x: "0" + str(x) if x < 10 else str(x)
-        jp_time = hour_formatFunc(jp_hour) + ":" + utc_time.split(":")[1]
-        twidata.time = jp_time
-
-        twidata.weather = self.translate(int(data["weather"][0]["id"]))
-
+        twidata.date = self.__getForecastDate()
+        twidata.time = self.__getForecastTime()
+        twidata.weather = data["weather"][0]["description"]
         twidata.temp = str( "{:.2f}".format( float(data["main"]["temp"]) - 273.15) ) + "℃"
         twidata.cloud_val = str( data["clouds"]["all"] ) + "％"
 
@@ -55,21 +48,20 @@ class WeatherForecaster:
         twidata.wind_val = str(data["wind"]["speed"]) + "m/s"
 
         return twidata
+    
+    def __getForecastDate(self):
+        jp_date = datetime.datetime.now(
+            datetime.timezone(datetime.timedelta(hours=12))
+        )
+        return jp_date.strftime("%Y年%m月%d日(%a)")
+    
+    def __getForecastTime(self):
+        jp_time = datetime.datetime.now(
+            # utc時間に＋９することで日本時間になり、さらに三時間先の予報なので、12足している
+            datetime.timezone(datetime.timedelta(hours=12))
+        )
+        return jp_time.strftime("%H:00") 
+        
 
-    def translate(self, weatherID):
-        if weatherID // 100 == 2:
-            return "雷雨"
-        elif weatherID // 100 == 3:
-            return "霧雨"
-        elif weatherID // 100 == 5:
-            return "雨"
-        elif weatherID // 100 == 6:
-            return "雪"
-        elif weatherID // 100 == 7:
-            return "特殊気象(霧など)"
-        elif weatherID == 800:
-            return "晴天"
-        elif weatherID // 100 == 8:
-            return "曇り"
-        else:
-            return "不明"
+wf = WeatherForecaster()
+wf.getTwiiteData()
