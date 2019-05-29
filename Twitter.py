@@ -3,7 +3,6 @@
 import urllib
 import urllib.error
 import urllib.request
-import Twidata
 
 # Twitterクラス
 class Twitter:

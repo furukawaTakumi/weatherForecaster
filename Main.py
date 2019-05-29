@@ -1,7 +1,7 @@
 # coding: utf-8
 
 import WeatherApiUi as wau
-import Twidata
+import TwiText
 import Twitter
 import WeatherDataExtractor as tc
 import APIgetDataException as apie
@@ -15,7 +15,7 @@ miyoshi = ('35.13','137.05')
 nissin = ('35.17', '136.96')
 
 twitter = Twitter.Twitter()
-twiData = Twidata.Twidata()
+twitext = TwiText.TwiText()
 weatherApi = wau.WeatherApiUi()
 extractor = tc.WeatherDataExtractor()
 
@@ -24,7 +24,7 @@ def beSureToDo(city):
         try:
             data = weatherApi.getDataLatLon(city[0],city[1],1)
             weatherData = extractor.DataSetting(data)
-            twitter.twitte( twiData.Create(weatherData) )
+            twitter.twitte( twitext.Build(weatherData) )
         except apie.APIgetDataException:
             sleep(60)
             continue

@@ -2,7 +2,6 @@
 
 import json
 import requests
-import Twidata
 import APIgetDataException as apide
 
 class WeatherApiUi:

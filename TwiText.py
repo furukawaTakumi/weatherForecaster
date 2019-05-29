@@ -1,7 +1,7 @@
 # coding utf-8
 
 #　ツイートする文章のクラス
-class Twidata:
+class TwiText:
     def __init__(self):
         source1 = '{0}\n{1}頃の{2}は天気は{3}です！\n\n詳細\n'
         source2 = ' 気温：{4}\n'
@@ -14,7 +14,7 @@ class Twidata:
         self.base_srt = source1 + source2 + source3 + source4 + source5 + source6 + source7
         pass
 
-    def Create(self, weatherData):
+    def Build(self, weatherData):
         str = self.base_srt.format(
             weatherData.date,
             weatherData.time,
