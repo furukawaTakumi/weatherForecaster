@@ -1,19 +1,30 @@
+# coding utf-8
 
 class Twidata:
-    def __init__(self, date=None, time=None, weather=None, temp=None,cloud_val=None, rain_val=None, wind_val=None):
-        self.date = date
-        self.time = time
-        self.weather = weather
-        self.temp = temp
-        self.cloud_val = cloud_val
-        self.rain_val = rain_val
-        self.wind_val = wind_val
+    def __init__(self):
+        source1 = '{0}\n{1}頃の{2}は天気は{3}です！\n\n詳細\n'
+        source2 = ' 気温：{4}\n'
+        source3 = ' 湿度：{5}\n'
+        source4 = ' 雲量：{6}\n'
+        source5 = ' 風量：{7}\n'
+        source6 = ' 気圧：{8}\n'
+        source7 = ' ※北緯{9}度, 東経{10}度あたりの情報'
 
-    def Print(self):
-        print("日付　" + self.date)
-        print("時間　" + self.time)
-        print("天気　" + self.weather)
-        print("気温　" + self.temp)
-        print("雲量　" + self.cloud_val)
-        print("雨量　" + self.rain_val)
-        print("風速　" + self.wind_val)
+        self.base_srt = source1 + source2 + source3 + source4 + source5 + source6 + source7
+        pass
+
+    def Create(self, weatherData):
+        str = self.base_srt.format(
+            weatherData.date,
+            weatherData.time,
+            weatherData.city,
+            weatherData.weather,
+            weatherData.temp,
+            weatherData.humidity,
+            weatherData.cloud_val,
+            weatherData.wind_val,
+            weatherData.pressure,
+            weatherData.lat,
+            weatherData.lon
+        )
+        return str

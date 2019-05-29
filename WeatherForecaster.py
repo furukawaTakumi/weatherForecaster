@@ -4,6 +4,7 @@ import json
 import requests
 import Twidata
 import APIgetDataException as apide
+import datetime
 
 # 天気を予想するクラス
 class WeatherForecaster:
@@ -31,20 +32,16 @@ class WeatherForecaster:
         except apide.APIgetDataException:
             raise apide.APIgetDataException("APIサービスが混んでいるようです")
 
+        print(data)
+
         date = data["dt_txt"]
-        twidata.date = date.split(" ")[0]
-        
-        # datetimeクラスを利用して表示できるように変更する
-        utc_time = data["dt_txt"].split(" ")[1]
-        jp_hour = (int(utc_time.split(":")[0]) + 9) % 24
-        hour_formatFunc = lambda x: "0" + str(x) if x < 10 else str(x)
-        jp_time = hour_formatFunc(jp_hour) + ":" + utc_time.split(":")[1]
-        twidata.time = jp_time
-
-        twidata.weather = self.translate(int(data["weather"][0]["id"]))
-
+        twidata.date = self.__getForecastDate()
+        twidata.time = self.__getForecastTime()
+        twidata.weather = self.__weatherTranslator( data["weather"][0]["id"] )
         twidata.temp = str( "{:.2f}".format( float(data["main"]["temp"]) - 273.15) ) + "℃"
-        twidata.cloud_val = str( data["clouds"]["all"] ) + "％"
+
+        if twidata.weather == "曇り":
+            twidata.cloud_val = self.__cloudsTranslator( data["weather"][0]["id"] )
 
         rain_val = 0
         if( "rain" in data and "3h" in data["rain"] ):
@@ -56,8 +53,22 @@ class WeatherForecaster:
 
         return twidata
 
-    def translate(self, weatherID):
-        if weatherID // 100 == 2:
+    def __getForecastDate(self):
+        jp_date = datetime.datetime.now(
+            datetime.timezone(datetime.timedelta(hours=12))
+        )
+        return jp_date.strftime("%Y年%m月%d日(%a)")
+
+    def __getForecastTime(self):
+        jp_time = datetime.datetime.now(
+            # utc時間に＋９することで日本時間になり、さらに三時間先の予報なので、12足している
+            datetime.timezone(datetime.timedelta(hours=12))
+        )
+        return jp_time.strftime("%H:00")
+
+    def __weatherTranslator(self, weatherID):
+        num = weatherID // 100
+        if num == 2:
             return "雷雨"
         elif weatherID // 100 == 3:
             return "霧雨"
@@ -71,5 +82,13 @@ class WeatherForecaster:
             return "晴天"
         elif weatherID // 100 == 8:
             return "曇り"
-        else:
-            return "不明"
+
+    def __cloudsTranslator(self, weatherID):
+        if weatherID == 801:
+            return "11-25%"
+        if weatherID == 802:
+            return "26-50%"
+        if weatherID == 803:
+            return "51-84%"
+        if weatherID == 804:
+            return "85-100%"

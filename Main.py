@@ -1,22 +1,35 @@
-import WeatherForecaster as wf
-import Twidata as td
-import datetime as dt
+import WeatherApiUi as wau
+import Twidata
 import Twitter
+import WeatherDataExtractor as tc
 import APIgetDataException as apie
 from time import sleep
+import WeatherData as wd
 
-contents = 'ラズパイ天気予報\n{0}\n{1}頃のAITは{2}になるでしょう！\n\n詳細\n 気温:{3}\n 雲量:{4}\n 降水量:{5}\n 風:{6}'
-forecaster = wf.WeatherForecaster()
-twidata = td.Twidata()
+seto = ('35.1815', '137.1087')
+toyota = ('35.08', '137.15')
+owariasahi = ('35.21', '137.03')
+miyoshi = ('35.13','137.05')
+nissin = ('35.17', '136.96')
+
 twitter = Twitter.Twitter()
+twiData = Twidata.Twidata()
+weatherApi = wau.WeatherApiUi()
+extractor = tc.WeatherDataExtractor()
 
-while(True):
+def beSureToDo(city):
+    while(True):
         try:
-            twidata = forecaster.getTwiiteData()
-            #twitter.twitte(contents.format(twidata.date, twidata.time, twidata.weather, twidata.temp, twidata.cloud_val, twidata.rain_val, twidata.wind_val))
+            data = weatherApi.getDataLatLon(city[0],city[1],1)
+            weatherData = extractor.DataSetting(data)
+            twitter.twitte( twiData.Create(weatherData) )
         except apie.APIgetDataException:
             sleep(60)
             continue
-        
-        print(contents.format(twidata.date, twidata.time, twidata.weather, twidata.temp, twidata.cloud_val, twidata.rain_val, twidata.wind_val))
         break
+
+beSureToDo(seto)
+beSureToDo(toyota)
+beSureToDo(owariasahi)
+beSureToDo(miyoshi)
+beSureToDo(nissin)
