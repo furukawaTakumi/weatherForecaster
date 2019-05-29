@@ -31,8 +31,3 @@ class WeatherApiUi:
         if "message" in res and 'Internal error: 500001' == res["message"]:
             raise apide.APIgetDataException("APIサービスが混んでいるようです")
         return res
-
-
-# wf = WeatherApiUi()
-# print( wf.getDataZip('470-0356,JP',1) )
-# print( wf.getDataLatLon('35.1815','137.1087',1))

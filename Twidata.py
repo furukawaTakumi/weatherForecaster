@@ -1,5 +1,6 @@
 # coding utf-8
 
+#　ツイートする文章のクラス
 class Twidata:
     def __init__(self):
         source1 = '{0}\n{1}頃の{2}は天気は{3}です！\n\n詳細\n'

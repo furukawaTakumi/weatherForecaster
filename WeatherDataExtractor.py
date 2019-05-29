@@ -1,9 +1,7 @@
+# coding: utf-8
+
 import datetime
 import WeatherData
-
-# 処理するデータ
-#
-# {'cod': '200', 'message': 0.0058, 'cnt': 1, 'list': [{'dt': 1559120400, 'main': {'temp': 292.48, 'temp_min': 292.48, 'temp_max': 293.544, 'pressure': 1008.15, 'sea_level': 1008.15, 'grnd_level': 986.86, 'humidity': 32, 'temp_kf': -1.07}, 'weather': [{'id': 802, 'main': 'Clouds', 'description': 'scattered clouds', 'icon': '03d'}], 'clouds': {'all': 39}, 'wind': {'speed': 4.51, 'deg': 313.581}, 'sys': {'pod': 'd'}, 'dt_txt': '2019-05-29 09:00:00'}], 'city': {'id': 1852663, 'name': 'Seto', 'coord': {'lat': 35.2333, 'lon': 137.1}, 'country': 'JP', 'population': 134246, 'timezone': 32400}}
 
 class WeatherDataExtractor:
     def __init__(self):
@@ -25,7 +23,6 @@ class WeatherDataExtractor:
         weatherData.wind_val = self.getWind( data )
         return weatherData
 
-    #　辞書から変更する
     def getCity(self,data):
         city_name = data["city"]["name"]
         return self.cityDic[city_name]

@@ -1,8 +1,11 @@
+# coding: utf-8
+
 import urllib
 import urllib.error
 import urllib.request
 import Twidata
 
+# Twitterクラス
 class Twitter:
     def __init__(self):
         self.base_url = 'https://api.thingspeak.com/apps/thingtweet/1/statuses/update/'

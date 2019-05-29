@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import WeatherApiUi as wau
 import Twidata
 import Twitter
