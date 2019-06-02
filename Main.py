@@ -23,7 +23,7 @@ def beSureToDo(city):
     while(True):
         try:
             data = weatherApi.getDataLatLon(city[0],city[1],1)
-            weatherData = extractor.DataSetting(data)
+            weatherData = extractor.getAllData(data)
             twitter.twitte( twitext.Build(weatherData) )
         except apie.APIgetDataException:
             sleep(60)

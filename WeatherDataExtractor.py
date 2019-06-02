@@ -8,7 +8,7 @@ class WeatherDataExtractor:
         self.cityDic = {'Seto': '瀬戸市', 'Toyota': '豊田市', 'Nisshin': '日進市', 'owariasahi': '尾張旭市', 'Miyoshi':"みよし市", 'Aichi-ken':'愛知県'}
         self.weatherDic = {'Clear':'晴天', 'Clouds':'曇り', 'Thunderstorm':'雷雨', 'Drizzle':'霧雨', 'Rain':'雨', 'Snow':'雪', 'Mist':'うすい霧', 'Smoke':'煙', 'Haze':'もや', 'Dust':'ほこり','Fog':'霧','Sand':'砂','Dust':'ほこり','Ash':'灰','Squall':'スコール','Tornado':'竜巻',}
 
-    def DataSetting(self, data):
+    def getAllData(self, data):
         weatherData = WeatherData.WeatherData()
         weatherData.date = self.getDate()
         weatherData.time = self.getTime()
